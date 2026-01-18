@@ -1,5 +1,6 @@
 from flask import Flask
 from app.models import db
+from app import routes
 import os
 SECRET_KEY = os.getenv("SQL_ALCHEMY_SECRET_KEY")
 
@@ -14,6 +15,8 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+
+    app.register_blueprint(routes.bp)
 
     return app
 

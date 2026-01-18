@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="stats">
+    <div class="stat-card">
+        <h3>Total Applications</h3>
+        <p>{{ total }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Applied</h3>
+        <p>{{ applied }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Interviews</h3>
+        <p>{{ interviews }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Offers</h3>
+        <p>{{ offers }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Rejected</h3>
+        <p>{{ rejected }}</p>
+    </div>
+</div>
+
+{% if jobs %}
+    {% for job in jobs %}
+    <div class="job-card">
+        <h2>{{ job.position }}</h2>
+        <p class="company">{{ job.company }}</p>
+        
+        <div class="job-meta">
+            {% if job.location %}
+            <span>Location: {{ job.location }}</span>
+            {% endif %}
+            
+            {% if job.salary %}
+            <span>Salary: {{ job.salary }}</span>
+            {% endif %}
+            
+            <span>Applied: {{ job.applied_date.strftime('%b %d, %Y') }}</span>
+        </div>
+        
+        <span class="status-badge status-{{ job.status }}">{{ job.status.title() }}</span>
+        
+        {% if job.url %}
+        <p style="margin-top: 12px;">
+            <a href="{{ job.url }}" target="_blank" style="color: #f97316; text-decoration: none;">View Job Posting →</a>
+        </p>
+        {% endif %}
+        
+        {% if job.notes %}
+        <p style="margin-top: 12px; padding: 12px; background: #1f2937; border-radius: 4px; font-size: 14px; color: #d1d5db;">
+            Notes: {{ job.notes }}
+        </p>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <h2>No applications yet</h2>
+        <p>Start tracking your job applications to see insights and analytics</p>
+        <a href="/add" class="btn">Add Your First Job</a>
+    </div>
+{% endif %}
+{% endblock %}
