@@ -44,6 +44,19 @@
         
         <span class="status-badge status-{{ job.status }}">{{ job.status.title() }}</span>
         
+        {% if job.skills %}
+        <div style="margin-top: 12px;">
+            <strong style="color: #9ca3af; font-size: 14px;">Skills:</strong>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+                {% for skill in job.skills %}
+                <span style="background: #1f2937; color: #f97316; padding: 4px 10px; border-radius: 4px; font-size: 12px; border: 1px solid #4b5563;">
+                    {{ skill.name }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         {% if job.url %}
         <p style="margin-top: 12px;">
             <a href="{{ job.url }}" target="_blank" style="color: #f97316; text-decoration: none;">View Job Posting →</a>

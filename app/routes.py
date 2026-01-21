@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from app.models import db, Job
+from app.models import db, Job, Skill
+from app.ai_service import extract_skills
 
 bp = Blueprint('main', __name__)
 
@@ -25,6 +26,8 @@ def index():
 @bp.route('/add', methods=['GET', 'POST'])
 def add_job():
     if request.method == 'POST':
+        description = request.form.get('description', '')
+        
         # Get data from the form
         job = Job(
             company = request.form['company'],
@@ -36,6 +39,28 @@ def add_job():
             status = 'applied'
         )
 
+
+        # Extract skills using AI if description provided
+        if description:
+            print(f"Extracting skills from description...")  # Debug
+            skill_names = extract_skills(description)
+            print(f"Extracted skills: {skill_names}")  # Debug
+            
+            # For each skill, create or update it in database
+            for skill_name in skill_names:
+                # Check if skill already exists
+                skill = Skill.query.filter_by(name=skill_name).first()
+                
+                if not skill:
+                    # Create new skill
+                    skill = Skill(name=skill_name, count=1)
+                    db.session.add(skill)
+                else:
+                    # Skill exists, increment count
+                    skill.count += 1
+                
+                # Link skill to this job
+                job.skills.append(skill)
 
         # Save to database
         db.session.add(job)
