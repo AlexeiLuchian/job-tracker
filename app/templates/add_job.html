@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Add Job - Jobiffy{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="background: #374151; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+        <h1 style="margin-bottom: 10px; color: #f9fafb;">Add New Application</h1>
+        <p style="color: #9ca3af; margin-bottom: 30px;">Track a new job application</p>
+        
+        <form method="POST">
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #d1d5db;">
+                    Company <span style="color: #f97316;">*</span>
+                </label>
+                <input type="text" name="company" required 
+                       placeholder="e.g., Amazon, Bitdefender, Endava"
+                       style="width: 100%; padding: 10px; border: 1px solid #4b5563; border-radius: 6px; font-size: 14px; background: #1f2937; color: #f9fafb;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #d1d5db;">
+                    Position <span style="color: #f97316;">*</span>
+                </label>
+                <input type="text" name="position" required 
+                       placeholder="e.g., Python Developer"
+                       style="width: 100%; padding: 10px; border: 1px solid #4b5563; border-radius: 6px; font-size: 14px; background: #1f2937; color: #f9fafb;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #d1d5db;">
+                    Location
+                </label>
+                <input type="text" name="location" 
+                       placeholder="e.g., Remote, Iasi, Bucharest"
+                       style="width: 100%; padding: 10px; border: 1px solid #4b5563; border-radius: 6px; font-size: 14px; background: #1f2937; color: #f9fafb;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #d1d5db;">
+                    Salary Range
+                </label>
+                <input type="text" name="salary" 
+                       placeholder="e.g., 5000 RON, 1500 EUR"
+                       style="width: 100%; padding: 10px; border: 1px solid #4b5563; border-radius: 6px; font-size: 14px; background: #1f2937; color: #f9fafb;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #d1d5db;">
+                    Job Posting URL
+                </label>
+                <input type="url" name="url" 
+                       placeholder="https://..."
+                       style="width: 100%; padding: 10px; border: 1px solid #4b5563; border-radius: 6px; font-size: 14px; background: #1f2937; color: #f9fafb;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #d1d5db;">
+                    Job Description
+                </label>
+                <textarea name="description" rows="8"
+                          placeholder="Paste the full job description here (jobiffy will use it to extract key skills with AI)"
+                          style="width: 100%; padding: 10px; border: 1px solid #4b5563; border-radius: 6px; font-size: 14px; background: #1f2937; color: #f9fafb; resize: vertical; font-family: inherit;"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 30px;">
+                <button type="submit" class="btn" style="padding: 12px 24px; font-size: 16px;">
+                    Add Application
+                </button>
+                <a href="/" class="btn btn-secondary" style="padding: 12px 24px; font-size: 16px; text-decoration: none; display: inline-block;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

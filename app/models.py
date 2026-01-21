@@ -8,7 +8,7 @@ class Job(db.Model):
     company = db.Column(db.String(40), nullable=False)
     position = db.Column(db.String(50), nullable=False)
     location = db.Column(db.String(60), nullable=False)
-    salary = db.Column(db.Double)
+    salary = db.Column(db.String(20))
     url = db.Column(db.String(100))
     description = db.Column(db.Text)
     status = db.Column(db.String(20), default="applied")
