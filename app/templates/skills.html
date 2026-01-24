@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Skills Analysis - Jobiffy{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: #f9fafb; margin-bottom: 10px;">Skills Analysis</h1>
+        <p style="color: #9ca3af;">Based on {{ total_jobs }} job application{{ 's' if total_jobs != 1 else '' }}</p>
+    </div>
+
+    {% if skills %}
+        <div style="background: #374151; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-bottom: 30px;">
+            <h2 style="color: #f9fafb; margin-bottom: 20px; font-size: 20px;">Most Requested Skills</h2>
+            
+            {% for skill in skills[:15] %}
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <strong style="color: #e5e7eb;">{{ skill.name }}</strong>
+                    <span style="color: #9ca3af;">{{ skill.count }} job{{ 's' if skill.count != 1 else '' }} ({{ skill.percentage }}%)</span>
+                </div>
+                
+                <div style="background: #1f2937; height: 24px; border-radius: 4px; overflow: hidden;">
+                    <div style="background: linear-gradient(90deg, #f97316, #ea580c); height: 100%; width: {{ skill.percentage }}%; transition: width 0.3s ease;"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="background: #374151; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <h2 style="color: #f9fafb; margin-bottom: 15px; font-size: 20px;">💡 Insights</h2>
+            
+            {% set top_skills = skills[:3] %}
+            <p style="color: #d1d5db; margin-bottom: 15px;">
+                Your top 3 most requested skills are:
+                <strong style="color: #f97316;">
+                    {% for skill in top_skills %}
+                        {{ skill.name }}{% if not loop.last %}{% if loop.index == top_skills|length - 1 %}, and {% else %}, {% endif %}{% endif %}
+                    {% endfor %}
+                </strong>
+            </p>
+            
+            {% if top_skills[0].percentage >= 50 %}
+            <p style="color: #d1d5db; margin-bottom: 15px;">
+                <strong style="color: #f97316;">{{ top_skills[0].name }}</strong> appears in {{ top_skills[0].percentage }}% of your applications. Make sure this skill is prominently featured on your resume and LinkedIn.
+            </p>
+            {% endif %}
+            
+            <p style="color: #d1d5db;">
+                Focus your learning and portfolio projects on these high-demand skills to maximize your chances with the companies you're targeting.
+            </p>
+        </div>
+
+    {% else %}
+        <div style="background: #374151; padding: 60px 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-align: center;">
+            <h2 style="color: #f9fafb; margin-bottom: 10px;">No Skills Data Yet</h2>
+            <p style="color: #9ca3af; margin-bottom: 20px;">Add job applications with descriptions to see skill analysis</p>
+            <a href="/add" class="btn">Add Your First Job</a>
+        </div>
+    {% endif %}
+
+    <div style="margin-top: 20px;">
+        <a href="/" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

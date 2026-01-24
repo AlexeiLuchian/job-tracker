@@ -71,3 +71,25 @@ def add_job():
     
     # if GET request, show the form
     return render_template('add_job.html')
+
+@bp.route('/skills')
+def skills_dashboard():
+    # Get all skills, sorted by count (most common first)
+    skills = Skill.query.order_by(Skill.count.desc()).all()
+
+    # Get total number of jobs
+    total_jobs = Job.query.count()
+
+    # Calculate what percentage of jobs need each skill
+    skills_data = []
+    for skill in skills:
+        percentage = (skill.count / total_jobs * 100) if total_jobs > 0 else 0
+        skills_data.append({
+            'name': skill.name,
+            'count': skill.count,
+            'percentage': round(percentage, 1)
+        })
+
+    return render_template('skills.html',
+                            skills=skills_data,
+                            total_jobs=total_jobs)
