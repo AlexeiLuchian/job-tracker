@@ -47,6 +47,7 @@
         .nav-links {
             display: flex;
             gap: 15px;
+            align-items: center;
         }
         
         .btn {
@@ -73,6 +74,44 @@
         
         .btn-secondary:hover {
             background: #4b5563;
+        }
+        
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #374151;
+            border-radius: 6px;
+        }
+        
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #f97316;
+        }
+        
+        .user-info span {
+            color: #e5e7eb;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .btn-logout {
+            padding: 8px 16px;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .btn-logout:hover {
+            background: #b91c1c;
         }
         
         .stats {
@@ -203,9 +242,21 @@
                 <p style="color: #9ca3af; font-size: 12px; margin-top: -5px;">Track jobs, extract skills with AI</p>
             </div>
             <div class="nav-links">
-                <a href="/" class="btn btn-secondary">Dashboard</a>
-                <a href="/add" class="btn">Add Job</a>
-                <a href="/skills" class="btn btn-secondary">Skills</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('routes.index') }}" class="btn btn-secondary">Dashboard</a>
+                    <a href="{{ url_for('routes.add_job') }}" class="btn">Add Job</a>
+                    <a href="{{ url_for('routes.skills_dashboard') }}" class="btn btn-secondary">Skills</a>
+                    
+                    <!-- User info section -->
+                    <div class="user-info">
+                        {% if current_user.picture %}
+                            <img src="{{ current_user.picture }}" alt="{{ current_user.name }}">
+                        {% endif %}
+                        <span>{{ current_user.name or current_user.email }}</span>
+                    </div>
+                    
+                    <a href="{{ url_for('routes.logout') }}" class="btn-logout">Logout</a>
+                {% endif %}
             </div>
         </nav>
     </header>

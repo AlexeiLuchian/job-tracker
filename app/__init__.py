@@ -1,18 +1,45 @@
 from flask import Flask
+from flask_login import LoginManager
+from authlib.integrations.flask_client import OAuth
 from app.models import db
 from app import routes
 import os
-SECRET_KEY = os.getenv("SQL_ALCHEMY_SECRET_KEY")
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+
+# Initialize OAuth for Google authentication
+oauth = OAuth()
 
 def create_app():
     app = Flask(__name__)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///jobs.db"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = SECRET_KEY
-
+    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")  # Changed from SQL_ALCHEMY_SECRET_KEY
+    
+    # Initialize extensions with app
     db.init_app(app)
+    login_manager.init_app(app)
+    oauth.init_app(app)
+    
+    # Configure Flask-Login
+    # This tells Flask-Login where to redirect users who aren't logged in
+    login_manager.login_view = 'routes.login_page'
+    
+    # Configure Google OAuth
+    oauth.register(
+        name='google',
+        client_id=os.getenv('GOOGLE_CLIENT_ID'),
+        client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+        server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+        client_kwargs={'scope': 'openid email profile'}
+    )
 
+    # Create database tables
     with app.app_context():
         db.create_all()
 
@@ -20,3 +47,9 @@ def create_app():
 
     return app
 
+# User loader function for Flask-Login
+# This tells Flask-Login how to load a user from the user ID stored in the session
+@login_manager.user_loader
+def load_user(user_id):
+    from app.models import User
+    return User.query.get(int(user_id))
