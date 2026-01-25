@@ -93,3 +93,15 @@ def skills_dashboard():
     return render_template('skills.html',
                             skills=skills_data,
                             total_jobs=total_jobs)
+
+@bp.route('/update_status/<int:job_id>', methods=['POST'])
+def update_status(job_id):
+    job = Job.query.get_or_404(job_id)
+    new_status = request.form.get('status')
+    
+    if new_status in ['applied', 'interview', 'offer', 'rejected']:
+        job.status = new_status
+        db.session.commit()
+        print(f"Updated {job.company} - {job.position} to {new_status}")
+    
+    return redirect(url_for('main.index'))

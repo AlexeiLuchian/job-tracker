@@ -10,24 +10,7 @@
     </div>
 
     {% if skills %}
-        <div style="background: #374151; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-bottom: 30px;">
-            <h2 style="color: #f9fafb; margin-bottom: 20px; font-size: 20px;">Most Requested Skills</h2>
-            
-            {% for skill in skills[:15] %}
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <strong style="color: #e5e7eb;">{{ skill.name }}</strong>
-                    <span style="color: #9ca3af;">{{ skill.count }} job{{ 's' if skill.count != 1 else '' }} ({{ skill.percentage }}%)</span>
-                </div>
-                
-                <div style="background: #1f2937; height: 24px; border-radius: 4px; overflow: hidden;">
-                    <div style="background: linear-gradient(90deg, #f97316, #ea580c); height: 100%; width: {{ skill.percentage }}%; transition: width 0.3s ease;"></div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <div style="background: #374151; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+        <div style="background: #374151; padding: 30px; margin-bottom:7px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
             <h2 style="color: #f9fafb; margin-bottom: 15px; font-size: 20px;">💡 Insights</h2>
             
             {% set top_skills = skills[:3] %}
@@ -49,6 +32,23 @@
             <p style="color: #d1d5db;">
                 Focus your learning and portfolio projects on these high-demand skills to maximize your chances with the companies you're targeting.
             </p>
+        </div>
+
+        <div style="background: #374151; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <h2 style="color: #f9fafb; margin-bottom: 20px; font-size: 20px;">Most Requested Skills</h2>
+            
+            {% for skill in skills[:15] %}
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <strong style="color: #e5e7eb;">{{ skill.name }}</strong>
+                    <span style="color: #9ca3af;">{{ skill.count }} job{{ 's' if skill.count != 1 else '' }} ({{ skill.percentage }}%)</span>
+                </div>
+                
+                <div style="background: #1f2937; height: 24px; border-radius: 4px; overflow: hidden;">
+                    <div style="background: linear-gradient(90deg, #f97316, #ea580c); height: 100%; width: {{ skill.percentage }}%; transition: width 0.3s ease;"></div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
 
     {% else %}
