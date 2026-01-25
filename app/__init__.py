@@ -17,9 +17,21 @@ oauth = OAuth()
 def create_app():
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///jobs.db"
+    # Configuration
+    # Get DATABASE_URL from environment (Supabase)
+    database_url = os.getenv('DATABASE_URL', 'sqlite:///jobs.db')
+    
+    # Vercel/Supabase compatibility
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")  # Changed from SQL_ALCHEMY_SECRET_KEY
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_pre_ping': True,
+        'pool_recycle': 300,
+    }
+    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
     
     # Initialize extensions with app
     db.init_app(app)
@@ -27,7 +39,6 @@ def create_app():
     oauth.init_app(app)
     
     # Configure Flask-Login
-    # This tells Flask-Login where to redirect users who aren't logged in
     login_manager.login_view = 'routes.login_page'
     
     # Configure Google OAuth
@@ -48,7 +59,6 @@ def create_app():
     return app
 
 # User loader function for Flask-Login
-# This tells Flask-Login how to load a user from the user ID stored in the session
 @login_manager.user_loader
 def load_user(user_id):
     from app.models import User
