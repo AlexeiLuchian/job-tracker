@@ -18,19 +18,28 @@ def create_app():
     app = Flask(__name__)
 
     # Configuration
-    # Get DATABASE_URL from environment (Supabase)
     database_url = os.getenv('DATABASE_URL', 'sqlite:///jobs.db')
     
-    # Vercel/Supabase compatibility
+    # Fix for Supabase/Heroku compatibility
     if database_url.startswith('postgres://'):
         database_url = database_url.replace('postgres://', 'postgresql://', 1)
     
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-        'pool_pre_ping': True,
-        'pool_recycle': 300,
-    }
+    
+    # Engine options optimized for serverless (Vercel)
+    if database_url.startswith('postgresql://'):
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+            'pool_pre_ping': False,           # Disable pre-ping for serverless
+            'pool_recycle': 300,              # Recycle connections every 5 minutes
+            'pool_size': 1,                   # Smaller pool for serverless
+            'max_overflow': 0,                # No overflow connections
+            'connect_args': {
+                'connect_timeout': 10,        # 10 second timeout
+                'sslmode': 'require'          # Require SSL
+            }
+        }
+    
     app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
     
     # Initialize extensions with app
